@@ -1,0 +1,13 @@
+name: Demo Action Workflows
+on: 
+  push:
+      branches: 
+        - 'main'
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+            - name: Build Docker Image
+              run: docker build --build-arg service_name=devops-test -t commy25/devops-test:demo-1.0 .
