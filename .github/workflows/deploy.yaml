@@ -31,7 +31,15 @@ jobs:
 
             # Step 4: Automate Test
             - name: Integration Test (Get Endpoint Application)
-              run: docker run -it --rm ${{ vars.DOCKER_HUB_USERNAME }}/${{ env.Image_Name }}:latest curl localhost:9999/hello
+              run: |
+                docker run -d -p 9999:9999 --name ${{ env.Image_Name }} \
+                ${{ vars.DOCKER_HUB_USERNAME }}/${{ env.Image_Name }}:latest
+
+                echo "Waiting for API to be ready..."
+                sleep 5 # Give the container time to start
+
+                echo "Testing the API endpoint..."
+                curl --fail http://localhost:9999/hello || exit 1
             
             # Step 5: Push the Docker Image to Docker Hub
             - name: Push Docker Image
