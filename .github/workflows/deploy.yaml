@@ -3,11 +3,30 @@ on:
   push:
       branches: 
         - 'main'
+
+env:
+  Service_Name: devops-test
+  Image_Name: devops-test
+
 jobs:
     build:
         runs-on: ubuntu-latest
         steps:
+            # Step 1: Checkout the Repository
             - name: Checkout Repository
               uses: actions/checkout@v4
+
+            # Step 2: Login to Docker Hub
+            - name: Log in to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                username: ${{ secrets.DOCKER_HUB_USERNAME }}   
+                password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}  
+            
+            # Step 3: Build the Docker Image    
             - name: Build Docker Image
-              run: docker build --build-arg service_name=devops-test -t commy25/devops-test:demo-1.0 .
+              run: docker build --build-arg service_name=${{ env.Service_Name }} -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.Image_Name }}:latest .
+            
+            # Step 4: Push the Docker Image to Docker Hub
+            - name: Push Docker Image
+              run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.Image_Name }}:latest
