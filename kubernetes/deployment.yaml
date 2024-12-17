@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops
+spec:
+  selector:
+    matchLabels:
+      app: devops
+  template:
+    metadata:
+      labels:
+        app: devops
+    spec:
+      containers:
+      - name: devops-test
+        image: commy25/devops-test:demo-1.0
+        ports:
+          - containerPort: 9999
+        livenessProbe:
+            httpGet:
+              path: /hello
+              port: 9999
+            initialDelaySeconds: 5
+            periodSeconds: 5
+        readinessProbe:
+            httpGet:
+              path: /hello
+              port: 9999
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
