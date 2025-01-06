@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: devops-test
-        image: commy25/devops-test:demo-1.0
+        image: commy25/devops-test:latest
         ports:
           - containerPort: 9999
         livenessProbe:
